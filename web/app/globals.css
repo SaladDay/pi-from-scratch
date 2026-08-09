@@ -73,6 +73,7 @@
 html {
   background: var(--paper);
   color: var(--ink);
+  overscroll-behavior: none;
   scroll-behavior: auto;
 }
 
@@ -80,6 +81,7 @@ body {
   margin: 0;
   min-width: 320px;
   overflow-x: hidden;
+  overscroll-behavior: none;
   background: var(--paper);
   color: var(--ink);
   font-family: var(--sans);
@@ -239,6 +241,12 @@ a:focus-visible,
   color: var(--ink);
 }
 
+.repo-link:focus-visible,
+.theme-toggle:focus-visible {
+  outline: 1px solid var(--accent);
+  outline-offset: 2px;
+}
+
 .theme-icon {
   grid-area: 1 / 1;
   transition: opacity 180ms ease, transform 240ms cubic-bezier(.16, 1, .3, 1);
@@ -308,19 +316,12 @@ a:focus-visible,
 }
 
 .lesson-header {
-  padding: 64px 0 44px;
+  padding: 64px 0 32px;
   border-bottom: 1px solid var(--line);
 }
 
-.eyebrow {
-  margin: 0;
-  color: var(--muted);
-  font-family: var(--mono);
-  font-size: var(--text-small);
-}
-
 .lesson-header h1 {
-  margin: 24px 0 18px;
+  margin: 0;
   font-size: var(--text-title);
   font-weight: 600;
   letter-spacing: -.02em;
@@ -348,7 +349,7 @@ a:focus-visible,
   --article-gap: 20px;
   --article-section-gap: 40px;
   max-width: 680px;
-  padding: 40px 0 32px;
+  padding: 32px 0 0;
   font-size: var(--text-base);
   line-height: 1.82;
 }
@@ -563,18 +564,14 @@ a:focus-visible,
 .lesson-footer {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-end;
   gap: 20px;
   max-width: 680px;
-  margin-top: 64px;
-  padding-top: 24px;
+  margin-top: 28px;
+  padding-top: 16px;
   border-top: 1px solid var(--line);
   font-family: var(--mono);
   font-size: var(--text-small);
-}
-
-.lesson-footer > span {
-  color: var(--muted);
 }
 
 .lesson-footer button {
@@ -594,7 +591,7 @@ a:focus-visible,
 .code-panel {
   position: sticky;
   top: calc(var(--header-height) + 24px);
-  height: calc(100vh - var(--header-height) - 48px);
+  height: calc(100dvh - var(--header-height) - 48px);
   min-height: 580px;
   overflow: hidden;
   border: 1px solid var(--line-strong);
@@ -602,11 +599,19 @@ a:focus-visible,
   overscroll-behavior: contain;
 }
 
+@media (min-width: 1181px) {
+  .code-panel[data-viewport-pinned="true"] {
+    position: fixed;
+    left: var(--panel-fixed-left);
+    width: var(--panel-fixed-width);
+  }
+}
+
 .panel-heading {
   height: 52px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
   padding: 0 18px;
   border-bottom: 1px solid var(--line);
   background: var(--paper);
@@ -618,8 +623,28 @@ a:focus-visible,
   font-weight: 600;
 }
 
-.panel-heading span {
+.editor-lock {
+  width: 30px;
+  height: 30px;
+  display: grid;
+  place-items: center;
+  margin-left: auto;
+  padding: 0;
+  border: 0;
+  background: transparent;
   color: var(--muted);
+  cursor: pointer;
+}
+
+.editor-lock:hover,
+.editor-lock.is-active {
+  background: var(--paper-deep);
+  color: var(--ink);
+}
+
+.editor-lock:focus-visible {
+  outline: 1px solid var(--accent);
+  outline-offset: 1px;
 }
 
 .map-stage {
@@ -764,7 +789,7 @@ a:focus-visible,
 
 .file-tree {
   overflow-y: auto;
-  overscroll-behavior: contain;
+  overscroll-behavior: none;
   padding: 12px 8px;
   border-right: 1px solid var(--line);
   background: var(--paper-deep);
@@ -833,30 +858,109 @@ a:focus-visible,
   background: var(--panel);
 }
 
-.code-tab {
+.code-tabs {
   height: 36px;
   display: flex;
   align-items: center;
-  gap: 7px;
-  width: max-content;
-  min-width: 130px;
-  padding: 0 12px;
-  border-right: 1px solid var(--line);
+  overflow-x: auto;
+  overflow-y: hidden;
   border-bottom: 1px solid var(--line);
+  background: var(--paper-deep);
+  scrollbar-width: none;
+}
+
+.code-tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.code-tab {
+  height: 35px;
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  min-width: 130px;
+  max-width: 190px;
+  border-right: 1px solid var(--line);
   background: var(--paper);
   color: var(--ink-soft);
   font-family: var(--mono);
   font-size: var(--text-small);
 }
 
+.code-tab:not(.is-active) {
+  background: var(--paper-deep);
+}
+
+.code-tab.is-active {
+  color: var(--ink);
+}
+
+.code-tab-select {
+  min-width: 0;
+  flex: 1;
+  align-self: stretch;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 0 5px 0 12px;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+}
+
+.code-tab-select span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.code-tab-close {
+  width: 28px;
+  height: 28px;
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  margin-right: 3px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  opacity: 0;
+}
+
+.code-tab:hover .code-tab-close,
+.code-tab.is-active .code-tab-close,
+.code-tab-close:focus-visible {
+  opacity: 1;
+}
+
+.code-tab-close:hover {
+  background: var(--line);
+  color: var(--ink);
+}
+
 .code-scroll {
-  height: calc(100% - 36px);
+  position: absolute;
+  top: 36px;
+  right: 0;
+  bottom: 0;
+  left: 0;
   overflow: auto;
-  overscroll-behavior: contain;
+  overscroll-behavior: none;
+  overflow-anchor: none;
   padding: 12px 0 22px;
   scroll-behavior: auto;
   scrollbar-color: var(--line-strong) transparent;
   scrollbar-width: thin;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.code-scroll.is-active {
+  visibility: visible;
+  pointer-events: auto;
 }
 
 .code-line {
@@ -980,30 +1084,14 @@ a:focus-visible,
   font-size: var(--text-small);
 }
 
-.trace-page-heading,
 .trace-workspace {
   width: min(100%, 1700px);
   margin-right: auto;
   margin-left: auto;
 }
 
-.trace-page-heading {
-  height: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 24px;
-  color: var(--muted);
-}
-
-.trace-page-heading strong {
-  color: var(--ink);
-  font-size: var(--text-base);
-  font-weight: 600;
-}
-
 .trace-workspace {
-  height: calc(100vh - var(--header-height) - 96px);
+  height: calc(100vh - var(--header-height) - 56px);
   min-height: 620px;
   display: grid;
   grid-template-columns: 190px minmax(480px, 1fr) minmax(330px, 390px);
@@ -1030,6 +1118,7 @@ a:focus-visible,
 
 .trace-case-list {
   overflow-y: auto;
+  overscroll-behavior: none;
   padding: 8px;
   scrollbar-color: var(--line-strong) transparent;
   scrollbar-width: thin;
@@ -1102,7 +1191,7 @@ a:focus-visible,
 
 .trace-file-tree {
   overflow-y: auto;
-  overscroll-behavior: contain;
+  overscroll-behavior: none;
   padding: 12px 8px;
   border-right: 1px solid var(--line);
   background: var(--paper-deep);
@@ -1150,7 +1239,7 @@ a:focus-visible,
   overflow: auto;
   padding: 12px 0 24px;
   background: var(--panel);
-  overscroll-behavior: contain;
+  overscroll-behavior: none;
   scrollbar-color: var(--line-strong) transparent;
   scrollbar-width: thin;
 }
@@ -1243,7 +1332,7 @@ a:focus-visible,
 
 .trace-inspector-scroll {
   overflow-y: auto;
-  overscroll-behavior: contain;
+  overscroll-behavior: none;
   scrollbar-color: var(--line-strong) transparent;
   scrollbar-width: thin;
 }
@@ -1465,14 +1554,6 @@ a:focus-visible,
   color: var(--paper);
 }
 
-.trace-controls > span {
-  position: absolute;
-  right: 16px;
-  color: var(--muted);
-  font-family: var(--mono);
-  font-size: var(--text-small);
-}
-
 .trace-control-progress {
   position: absolute;
   top: -1px;
@@ -1494,11 +1575,6 @@ a:focus-visible,
   align-content: center;
   justify-content: center;
   text-align: center;
-}
-
-.trace-empty h1 {
-  margin: 0 0 8px;
-  font-size: var(--text-base);
 }
 
 .trace-empty p:last-child {
@@ -1724,10 +1800,6 @@ a:focus-visible,
     padding: calc(var(--header-height) + 18px) 18px 40px;
   }
 
-  .trace-page-heading {
-    height: 36px;
-  }
-
   .trace-workspace {
     margin-right: -18px;
     margin-left: -18px;
@@ -1763,9 +1835,7 @@ a:focus-visible,
     padding: 0 8px;
   }
 
-  .trace-pane-heading span,
-  .trace-page-heading span,
-  .trace-controls > span {
+  .trace-pane-heading span {
     display: none;
   }
 
@@ -1817,11 +1887,11 @@ a:focus-visible,
   }
 
   .lesson-header {
-    padding: 44px 0 36px;
+    padding: 44px 0 28px;
   }
 
   .article-body {
-    padding-top: 32px;
+    padding-top: 28px;
   }
 
   .article-body h2 {

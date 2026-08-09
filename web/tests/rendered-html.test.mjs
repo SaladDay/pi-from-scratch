@@ -3,26 +3,13 @@ import { readFile } from "node:fs/promises";
 import test from "node:test";
 
 async function render() {
-  const workerUrl = new URL("../dist/server/index.js", import.meta.url);
-  workerUrl.searchParams.set("test", `${process.pid}-${Date.now()}`);
-  const { default: worker } = await import(workerUrl.href);
-
-  return worker.fetch(
-    new Request("http://localhost/", { headers: { accept: "text/html" } }),
-    { ASSETS: { fetch: async () => new Response("Not found", { status: 404 }) } },
-    { waitUntil() {}, passThroughOnException() {} },
-  );
+  return readFile(new URL("../.next-test/server/app/index.html", import.meta.url), "utf8");
 }
 
-test("server-renders the module map as the entry", async () => {
-  const response = await render();
-  assert.equal(response.status, 200);
-  assert.match(response.headers.get("content-type") ?? "", /^text\/html\b/i);
-
-  const html = await response.text();
+test("server-renders the preface as the entry", async () => {
+  const html = await render();
   assert.match(html, /<html[^>]*lang="zh-CN"/i);
-  assert.match(html, /<title>PI from Scratch · 从零手写 Coding Agent<\/title>/i);
-  assert.match(html, /模块地图/);
+  assert.match(html, /<title>PI from Scratch · 创造属于你的pi-agent<\/title>/i);
   assert.match(html, /先导/);
   assert.match(html, /nano-pi/);
   assert.doesNotMatch(html, /codex-preview|Your site is taking shape|react-loading-skeleton/i);
@@ -49,18 +36,28 @@ test("keeps lesson content generated from the teaching sources", async () => {
   assert.match(reader, /<div class="checkpoint-anchor"/);
   assert.doesNotMatch(reader, /<span class="checkpoint-anchor"/);
   assert.match(reader, /hasSelectedFile/);
+  assert.match(reader, /code-tabs/);
+  assert.match(reader, /handleCloseFile/);
+  assert.match(reader, /codeScrollRefs/);
+  assert.match(reader, /data-viewport-pinned/);
+  assert.match(reader, /positions\.get\(selectedFile\)/);
+  assert.match(reader, /selectionCauseRef/);
+  assert.match(reader, /editor-lock/);
+  assert.match(reader, /navigationLocked/);
   assert.match(lessonData, /"src\/llm\.ts": "", "src\/agent\.ts": ""/);
   assert.match(lessonData, /initialRepo: emptyRepo/);
   assert.match(lessonData, /chapter2Repo/);
-  assert.match(layout, /pi-from-scratch-theme/);
-  assert.match(layout, /prefers-color-scheme: dark/);
+  assert.match(reader, /pi-from-scratch-theme/);
+  assert.match(reader, /prefers-color-scheme: dark/);
+  assert.match(layout, /suppressHydrationWarning/);
   assert.match(reader, /className="theme-toggle"/);
-  assert.match(reader, />trace跟踪<\/button>/);
+  assert.match(reader, />trace 跟踪<\/button>/);
   assert.match(traceLab, /toggleBreakpoint/);
   assert.match(traceLab, /has-breakpoint/);
   assert.match(traceLab, /continueToBreakpoint/);
   assert.match(traceLab, /trace-prompt-panel/);
   assert.match(traceLab, /"src\/tui\.ts"/);
+  assert.doesNotMatch(traceLab, /trace-page-heading/);
   assert.doesNotMatch(traceLab, /trace-step-list/);
   assert.match(traceDebugger, /buildDebugFrames/);
   assert.match(traceDebugger, /CallFrame|callStack/);

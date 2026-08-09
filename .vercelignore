@@ -1,0 +1,10 @@
+node_modules
+web/node_modules
+web/.next
+web/.next-test
+web/.vinext
+web/dist
+web/.wrangler
+web/coverage
+.DS_Store
+*.log

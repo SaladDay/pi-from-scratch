@@ -619,7 +619,7 @@ async function main() {
 每轮结束后调 `persistSession()`，把 context 里新增的消息 append 到 `~/.nanopi/session.jsonl`。下次启动时 `loadSession()` 把它们读回来，context 就恢复了。JSONL 格式是每行一个 JSON 对象，写起来简单（直接 appendFile），读起来也容错（某一行 JSON 坏了跳过，不影响其他行）。
 
 
-一个能读能写能改代码能跑命令的 coding agent，就做好了。
+一个能读能写能改代码能跑命令的 coding agent 就做好了。模块地图
 
 这时候你可以自己去跑跑看src下面的代码，我相信运行起来对你来说不是难事。
 

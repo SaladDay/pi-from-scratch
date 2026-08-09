@@ -70,7 +70,7 @@ function callStack(position: TraceSource): TraceCallFrame[] {
     frames.push({ name: "onPrompt", source: source("src/cli.ts", "for await (const ev of runAgent") });
     return frames;
   }
-  if (position.file !== "src/cli.ts" && position.file !== "src/tui.ts") {
+  if (position.file !== "src/cli.ts") {
     if (position.file === "src/agent.ts" && position.line < 71) {
       frames.push({ name: "runAgent", source: source("src/agent.ts", "await compactContext(model, context, signal)") });
     } else if (position.file !== "src/agent.ts") {

@@ -1,7 +1,7 @@
 {
   "name": "pi-from-scratch",
   "version": "0.1.0",
-  "description": "Build a minimal coding agent from scratch in TypeScript.",
+  "description": "A 600-line TypeScript guide to building your own pi-agent from scratch.",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -13,7 +13,10 @@
     "agent-loop",
     "llm",
     "tool-calling",
-    "typescript"
+    "typescript",
+    "pi-agent",
+    "llm-agent",
+    "typescript-tutorial"
   ],
   "type": "module",
   "bin": { "pi-from-scratch": "./dist/cli.js" },

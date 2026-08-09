@@ -3,14 +3,12 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import hljs from "highlight.js/lib/core";
 import typescript from "highlight.js/lib/languages/typescript";
-import {
-  ChevronLeft,
-  ChevronRight,
-  FileCode2,
-  Folder,
-  Play,
-  RotateCcw,
-} from "lucide-react";
+import ChevronLeft from "lucide-react/dist/esm/icons/chevron-left.mjs";
+import ChevronRight from "lucide-react/dist/esm/icons/chevron-right.mjs";
+import FileCode2 from "lucide-react/dist/esm/icons/file-code-2.mjs";
+import Folder from "lucide-react/dist/esm/icons/folder.mjs";
+import Play from "lucide-react/dist/esm/icons/play.mjs";
+import RotateCcw from "lucide-react/dist/esm/icons/rotate-ccw.mjs";
 import { fullRepo } from "./lesson-data";
 import { traceCases } from "./trace-data.generated";
 import { buildDebugFrames } from "./trace-debugger";
@@ -126,7 +124,6 @@ export default function TraceLab() {
   if (!traceCase || !frame) {
     return (
       <main className="trace-shell trace-empty">
-        <h1>trace跟踪</h1>
         <p>trace 尚未生成。</p>
       </main>
     );
@@ -137,11 +134,6 @@ export default function TraceLab() {
 
   return (
     <main className="trace-shell">
-      <header className="trace-page-heading">
-        <strong>trace跟踪</strong>
-        <span>点击行号设置断点</span>
-      </header>
-
       <section className="trace-workspace">
         <nav className="trace-case-sidebar" aria-label="trace 案例">
           <header className="trace-pane-heading">
@@ -291,7 +283,6 @@ export default function TraceLab() {
           >
             <ChevronRight size={17} />
           </button>
-          <span>F5 继续 · F10 单步</span>
         </footer>
       </section>
     </main>

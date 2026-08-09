@@ -3,15 +3,13 @@
 
 [pi](https://github.com/earendil-works/pi) 是一个上万行的生产级 AI coding agent。nanopi 是它的教学版，600 行代码。
 
-Mario Zechner 造 pi 的时候说过一句话："your biggest enemy is still complexity. it's also your agent's biggest enemy." pi 的整个设计押在一个判断上：agent 需要的是四个工具（read, write, edit, bash）加一份不到 1000 token 的 system prompt，其他全部 opt-in。功能越多 agent 行为越不可预测，所以 pi 的策略是尽可能少加功能，提供原语，给模型足够的自主性。
-
-> **原语 \ 功能**：功能可以理解成"做汉堡"按钮，按一下汉堡就出来了，但你想换个酱料或者不要生菜就得去改这个按钮的内部逻辑。原语是烤肉饼、切面包、挤酱料这些最小操作，你自己决定怎么组合。pi 给你的是 read、write、edit、bash 这四个原语，想要什么工作流，自己用这几块拼。
-
 这篇文章的食用方式很简单。我们写的时候采用的方案是跟着数据流走、需要什么就写什么，每个模块的出现都是直觉的。右侧有一个编辑器，你读到哪一块，那一块的代码就会浮现出来。读完整篇文章，nanopi 的源码就全都完整了。
+
+> 如果你不想编辑器随着文章滚动动来动去，编辑器右上角有个锁，打开它。
 
 放轻松，这是一篇文章，不是一本书，而且是给初学者写的，你会很容易看懂。同时，我们有一个“语法扫盲块“，不用担心TS的语法看不懂。
 
-> 现在是一篇文章，后续可能会变成很多篇。pi 里还有不少 nanopi 没覆盖的东西值得单独写，比如精确的 token 估算和 compaction 切割策略、TypeScript 扩展系统（extensions / skills）、多 provider 适配和 model routing、session branching、以及 pi-tui 的 differential renderer。【这些词是什么意思你都不用管，只是预告一下】
+> BTW，现在是一篇文章，后续可能会变成很多篇。pi 里还有不少 nano-pi 没覆盖的东西值得单独写，比如精确的 token 估算和 compaction 切割策略、TypeScript 扩展系统（extensions / skills）、多 provider 适配和 model routing、session branching、以及 pi-tui 的 differential renderer。【这些词是什么意思你都不用管，只是预告一下】
 
 ## 让我们开始吧。
 
@@ -56,7 +54,7 @@ pi 里对应 `pi-agent-core`。
 
 对外暴露 `Tui` 类，提供 `onPrompt()`、`onAbort()`、`printText()`、`printToolCall()`、`printToolResult()` 等方法。
 
-下面这张图画的就是这个意思。agent 往外吐同一串 AgentEvent，左边接一个终端 tui 就是命令行工具，右边接一个 HTTP server 就变成 Web 应用，agent 本身的代码完全不用动。nanopi 自带的是左边那个 tui，但你随时可以换成别的。
+`runAgent()` 往外吐 AgentEvent。在nanopi 里由 CLI 接收这些事件，再给 Tui 、让他渲染出来；换成 Web 应用时，可以让 HTTP server 接收同一条事件流，再通过 SSE 发给浏览器、让浏览器渲染结果。nanopi 自带的是左边那个 tui，但你随时可以换成别的。
 
 ![同一个 AgentEvent 流可以被不同界面消费](/figures/event-consumers.png)
 

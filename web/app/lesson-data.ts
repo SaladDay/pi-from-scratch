@@ -13,8 +13,6 @@ export type Checkpoint = {
 
 export type Lesson = {
   id: "chapter1" | "chapter2";
-  number: string;
-  eyebrow: string;
   title: string;
   description: string;
   readingTime: string;
@@ -389,8 +387,6 @@ assertCheckpointOrder(lessonMarkdown.chapter2, chapter2Checkpoints);
 export const lessons: Record<Lesson["id"], Lesson> = {
   chapter1: {
     id: "chapter1",
-    number: "01/",
-    eyebrow: "",
     title: "先导",
     description: "先看完整仓库。读到哪个模块，右侧就照亮哪一块。",
     readingTime: "约 8 分钟",
@@ -399,9 +395,7 @@ export const lessons: Record<Lesson["id"], Lesson> = {
   },
   chapter2: {
     id: "chapter2",
-    number: "02",
-    eyebrow: "从空目录开始",
-    title: "nano-pi",
+    title: "创造你的 nano-pi",
     description: "从一个 while 循环出发，沿着数据流把五个文件逐步写出来。",
     readingTime: "约 24 分钟",
     markdown: lessonMarkdown.chapter2,
