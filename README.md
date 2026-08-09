@@ -6,6 +6,8 @@
 
 网站把文章和源码放在一起。阅读推进时，右侧编辑器会逐步补全代码；最后一章提供六组离线 trace，可以像调试普通程序一样逐行执行、设置断点并查看核心状态。
 
+[在线阅读 PI from Scratch](https://nanopi-from-scratch.garden-grove-1110.chatgpt.site)
+
 ## 从哪里开始
 
 1. **模块地图**：先认清 `llm`、`agent`、`tools`、`tui`、`cli` 的边界。
