@@ -33,16 +33,6 @@ npm run dev
 
 API Key 只从环境变量读取，不会写进源码或网站。线上 trace 是预先生成的静态数据，浏览网站不会发起模型请求。
 
-## 五个文件
-
-| 文件 | 职责 |
-| --- | --- |
-| `src/llm.ts` | 请求 OpenAI 兼容 API，把 SSE 转成统一事件流 |
-| `src/agent.ts` | 维护 Agent Loop、Context、工具执行与终止条件 |
-| `src/tools.ts` | `read_file`、`write_file`、`edit`、`run_bash` |
-| `src/tui.ts` | 读取输入、打印流式输出、处理 Ctrl+C |
-| `src/cli.ts` | 组装模块并持久化 session |
-
 ## 本地运行教学网站
 
 ```bash
