@@ -31,7 +31,7 @@ npm run dev
 - `NANOPI_MODEL`：模型名
 - `NANOPI_BASE_URL`：OpenAI 兼容接口地址，默认 `https://api.openai.com/v1`
 
-API Key 只从环境变量读取，不会写进源码或网站。线上 trace 是预先生成的静态数据，浏览网站不会发起模型请求。
+线上 trace 是预先生成的静态数据，浏览网站不会发起模型请求。
 
 ## 本地运行教学网站
 
