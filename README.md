@@ -2,19 +2,17 @@
 
 从零手写一个能读文件、改代码、执行命令的 TypeScript coding agent。
 
-项目沿着 [pi](https://github.com/earendil-works/pi) 的数据流拆解：用户输入进入 Context，LLM 返回文本或 tool call，Agent Loop 执行工具并把结果放回 Context，直到这一轮结束。教学实现叫 `nano-pi`，核心只有五个 TypeScript 文件。
+项目沿着 [pi](https://github.com/earendil-works/pi) 的数据流拆解，需要什么、我们造什么，所有组件都是符合直觉的。删除部分pi的工程细节，留下pi的核心思想。
 
-网站把文章和源码放在一起。阅读推进时，右侧编辑器会逐步补全代码；最后一章提供六组离线 trace，可以像调试普通程序一样逐行执行、设置断点并查看核心状态。
+放轻松，这是一篇文章，不是一本书，你会很容易看懂。
+
+网站把文章和源码放在一起。阅读推进时，右侧编辑器会逐步补全代码，当你看完的时候，nano-pi的代码也全部呈现在编辑器中。
+
+同时设计了一个 Trace 跟踪，可以打断点逐行过代码，希望能帮助大家理解代码执行流。
 
 [在线阅读 PI from Scratch](https://nanopi-from-scratch.garden-grove-1110.chatgpt.site)
 
-## 从哪里开始
-
-1. **模块地图**：先认清 `llm`、`agent`、`tools`、`tui`、`cli` 的边界。
-2. **nano-pi**：沿数据流从类型定义写到完整 Agent Loop。
-3. **trace 跟踪**：单步回放真实模型产生的典型路径。
-
-教学正文在 [`docs/ch01-modules.md`](docs/ch01-modules.md) 和 [`docs/ch02-loop.md`](docs/ch02-loop.md)，网站源码在 [`web/`](web/)。
+> 文章保留古法手敲，尽可能没有ai味，希望大家读的开心。
 
 ## 运行 nano-pi
 
@@ -28,7 +26,7 @@ npm run dev
 
 可选环境变量：
 
-- `NANOPI_MODEL`：模型名，默认 `glm-5.2`
+- `NANOPI_MODEL`：模型名
 - `NANOPI_BASE_URL`：OpenAI 兼容接口地址，默认 `https://api.openai.com/v1`
 
 API Key 只从环境变量读取，不会写进源码或网站。线上 trace 是预先生成的静态数据，浏览网站不会发起模型请求。
