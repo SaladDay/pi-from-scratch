@@ -1,5 +1,7 @@
 # PI from Scratch
 
+[![PI from Scratch：从零手撕一个 Coding Agent](./web/public/og.png)](https://pi-from-scratch.vercel.app)
+
 从零手写一个能读文件、改代码、执行命令的 TypeScript coding agent。
 
 项目沿着 [pi](https://github.com/earendil-works/pi) 的数据流拆解，需要什么、我们造什么，所有组件都是符合直觉的。
