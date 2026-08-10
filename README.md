@@ -1,6 +1,10 @@
 # PI from Scratch
 
-[![PI from Scratch：从零手撕一个 Coding Agent](./web/public/og.png)](https://pi-from-scratch.vercel.app)
+<p align="center">
+  <a href="https://pi-from-scratch.vercel.app">
+    <img src="./web/public/og.png" alt="PI from Scratch：从零手撕一个 Coding Agent" width="80%">
+  </a>
+</p>
 
 从零手写一个能读文件、改代码、执行命令的 TypeScript coding agent。
 
@@ -41,13 +45,6 @@ npm run dev
 cd web
 npm install
 npm run dev
-```
-
-## 测试
-
-```bash
-npm test
-cd web && npm test
 ```
 
 ## Star History
