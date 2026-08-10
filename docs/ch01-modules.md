@@ -1,4 +1,3 @@
-# PI from Scratch
 "What I cannot create, I do not understand." Richard Feynman 去世时，黑板上留着这句话。
 
 [pi](https://github.com/earendil-works/pi) 是一个上万行的生产级 AI coding agent。nanopi 是它的教学版，600 行代码。
@@ -17,9 +16,9 @@ nanopi 整个项目就五个 TypeScript 文件。在开始跟着数据流造代�
 
 ## llm.ts
 
-跟 LLM API 通信。吃进去一个 Context（聊天记录，纯 JSON），吐出来一串流式事件（StreamEvent）。四种事件：`text_delta`（模型吐了一段文字）、`tool_call`（模型想调工具）、`done`（这轮结束了）、`error`（炸了）。HTTP 怎么发、SSE 怎么解析、tool_call 的分片参数怎么拼，全封在这个文件里，上层不用管。
+跟具体的不同厂家的 LLM API 通信。输入 Context（聊天记录，纯 JSON），输出一串流式事件（StreamEvent）。四种事件：`text_delta`（模型吐了一段文字）、`tool_call`（模型想调工具）、`done`（这轮结束了）、`error`（炸了）。HTTP 怎么发、SSE 怎么解析、tool_call 的分片参数怎么拼，全是他的工作，上层不用管，只需要处理他输出的流式事件。
 
-Context 定义在这个文件里，因为 Context 本质上就是"喂给 LLM 的东西"，归 LLM 层管。pi 也是同样的做法。Context 的结构很简单，一个 `systemPrompt` 加一个 `messages` 数组，纯 JSON，可以直接 `JSON.stringify` 存到文件里，下次读回来继续聊。
+Context 定义在这个文件里，因为 Context 本质上就是"喂给 LLM 的东西"，归 LLM 层管。pi 也是同样的做法。Context 的结构很简单，一个 `systemPrompt` 加一个 `messages` 数组，纯 JSON，可以直接 `JSON.stringify` 存到文件里，下次load回来就可以继续聊天了。
 
 对外暴露 `stream()` 函数，以及 Context、Message、StreamEvent 等类型定义。pi 里对应 `pi-ai` 包，pi-ai 要适配十几个 provider，nanopi 只支持 OpenAI 兼容格式。
 
@@ -30,7 +29,7 @@ Context 定义在这个文件里，因为 Context 本质上就是"喂给 LLM 的
 
 agent 的循环，整个项目的核心。调 `llm.ts` 的 `stream()` 问模型，模型说要调工具就调，调完把结果塞回 Context 再问，持续这个过程，直到模型说“好了好了，我要结束了“。
 
-对外暴露 `runAgent()` 函数，往外吐 AgentEvent（assistant_text / tool_call / tool_result / turn_end）。AgentEvent 跟 llm 层的 StreamEvent 不是一套，语义更高级。这两层事件的分离是有意的，UI 层只需要认识 AgentEvent，不用关心底层 LLM 的响应格式长什么样。
+对外暴露 `runAgent()` 函数，往外吐 AgentEvent（assistant_text / tool_call / tool_result / turn_end）。AgentEvent 跟 llm 层的 StreamEvent 不是一套，语义更高级。这两层事件的分离是有意的，UI 层只需要认识 AgentEvent，不用关心 LLM 的具体响应是什么。
 
 pi 里对应 `pi-agent-core`。
 
@@ -61,7 +60,7 @@ pi 里对应 `pi-agent-core`。
 
 ## cli.ts
 
-胶水。读配置，造 Model，拿到工具和 Tui，监听输入，把 AgentEvent 转发给 Tui 显示。每轮结束把消息 append 到 `~/.nanopi/session.jsonl`。
+胶水。读配置，造 Model，拿到工具和TUI，监听输入，把 AgentEvent 转发给 TUI 显示。每轮结束把消息 append 到 `~/.nanopi/session.jsonl`。
 
 pi 里对应 `pi-coding-agent`【碎碎念，在我们这可能比较简单，在pi中包括了各种前置后置检查hook等，还是有复杂度的】。
 
