@@ -22,7 +22,7 @@
 </div>
 </details>
 
-这副骨架暂时还不能运行，`Model`、`Context`、`AgentTool` 和 `AgentEvent` 也都还没定义。注释编号暂时不连续，空着的 0、3、6 是后面才会插入的压缩、截断和中断处理。现在只需要记住数据流的顺序，后面每一轮出现的代码都会落回这些位置。
+这副骨架暂时还不能运行，`Model`、`Context`、`AgentTool` 和 `AgentEvent` 也都还没定义。注释编号暂时不连续，空着的 0、3、6 是后面才会插入的小细节。现在只需要记住数据流的顺序，后面每一轮出现的代码都会回填这些位置。
 
 
 ## 怎么跟 LLM 说话
@@ -115,7 +115,7 @@ data: [DONE]
 
 <!-- checkpoint: llm-sse-parse -->
 
-### 先翻译一个 chunk
+### API响应后，先翻译一个 chunk
 
 一行 SSE 去掉 `data: ` 以后就是一个 JSON chunk。`handleSSELine()` 负责翻译这一行：有 `delta.content` 就取出文本，有 tool_call 分片就按 index 累积 name 和 arguments。
 
@@ -125,7 +125,7 @@ tool_call 的参数也是 JSON，但分片到达时不一定刚好是完整的�
 
 <!-- checkpoint: llm-stream-read -->
 
-### 再把整条流读完
+### chunk 翻译完了，再把整条流读完
 
 现在把单行解析接回 `stream()`。`reader.read()` 不断拿网络数据，`TextDecoder` 把字节变成文字，`buf` 留住末尾还没凑成完整一行的部分。每找到一个换行，就取出一条 `data: ` 交给 `handleSSELine()`。
 
@@ -133,15 +133,13 @@ tool_call 的参数也是 JSON，但分片到达时不一定刚好是完整的�
 
 <!-- checkpoint: llm-helpers -->
 
-nanopi 内部的消息格式跟 OpenAI API 要求的格式有差异。比如 tool_result 在 nanopi 里嵌在 user message 内部，OpenAI 要求拆成独立的 `role: "tool"` 消息。`contextToOpenAIMessages()` 在发请求前逐条转换：普通文本保留 user 或 assistant，tool_use 变成 `tool_calls`，tool_result 变成 `role: "tool"`。
+nanopi 内部的消息格式跟 OpenAI API 要求的格式有差异。比如 tool_result 在 nano-pi 里嵌在 user message 内部，OpenAI 要求拆成独立的 `role: "tool"` 消息。`contextToOpenAIMessages()` 在发请求前逐条转换：普通文本保留 user 或 assistant，tool_use 变成 `tool_calls`，tool_result 变成 `role: "tool"`。不过这都是一些小细节，我们为什么不保持和openai api格式一样呢？其实很好理解，因为我们要兼容很多provider，无论和谁的格式一样，最后都会和另一家有所差异，那不然就用我们最顺手的数据结构。
 
 <!-- checkpoint: llm-message-builders -->
 
 API 回复也要装回 nanopi 自己的 Context。`buildAssistantMessage()` 把本轮文本和 tool_calls 合成一条 assistant message；`buildToolResultMessage()` 把执行结果合成一条带 tool_result blocks 的 user message。
 
 下一节写 agent loop 时会直接调用这两个函数。
-
-
 
 
 ## LLM 要调工具，工具哪来
@@ -249,7 +247,7 @@ async function* runAgent(model, context, tools, signal): AsyncGenerator<AgentEve
 
 等这轮 stream 结束，需要把模型的回复塞回 context。怎么塞？`llm.ts` 导出了 `buildAssistantMessage()`，把这一轮收集到的文本和 tool_calls 打包成一条 assistant message 就行。
 
-然后看 tool_calls 数组。空的，循环结束。不为空，挨个执行，每执行完一个就 yield 一个 `tool_result` 事件出去。工具名不存在，或者 execute 抛出异常，都转换成 `error: ...` 字符串，仍然作为一条工具结果放回到 Context。
+然后看 tool_calls 数组。空的，循环结束。不为空，挨个执行，每执行完一个就 yield 一个 `tool_result` 事件出去。工具名不存在，或者 execute 抛出异常，都转换成 `error: ...` 字符串，仍然作为一条工具结果放回到 Context【错误也是一种值得被LLM读的信息，也是重要的上下文】。
 
 全部执行完，结果也要塞回 context，用的是 `llm.ts` 的另一个辅助函数 `buildToolResultMessage()`，把结果打包成一条带 tool_result 的 user message。塞完，进入下一轮循环。API 偶尔会给出 `tool_use` stopReason 却没有任何 tool_call，这种畸形回复按普通的 `end_turn` 结束。
 
@@ -352,7 +350,10 @@ context 就是这么一条一条长起来的。每轮 stream 加一条 assistant
 
 数据闭环在 Context、stream、agent 和 tool。UI 挂在循环外面，换成终端、网页或者日志记录器，都不会改动 agent loop。
 
-图里画的是一轮顺利跑完的情况。真实 API 也会在半路停下来，agent 必须先判断手里的数据是否完整，再决定能不能继续执行工具。先看最常见的一种：回复撞上了长度上限。
+图里画的是一轮顺利跑完的情况。真实 API 也会在半路停下来，agent 必须先判断手里的数据是否完整，再决定能不能继续执行工具。
+
+
+先看最常见的一种：回复撞上了长度上限。
 
 
 <!-- checkpoint: agent-max-tokens -->
@@ -533,7 +534,7 @@ tui 最重要的特点是它完全不知道 LLM 和 tool 的存在。它只认�
 
 ### 换个"前端"
 
-为了让这层解耦变得直观，我们写一个小实验。不动 agent 的任何代码，把 tui 换成一个 HTTP server，让浏览器来消费 AgentEvent。
+为了让这层解耦变得直观，我们可以写一个小实验。不动 agent 的任何代码，把 tui 换成一个 HTTP server，让浏览器来消费 AgentEvent。
 
 ```typescript
 import { createServer } from 'node:http'
