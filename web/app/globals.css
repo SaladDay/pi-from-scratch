@@ -354,8 +354,12 @@ a:focus-visible,
   line-height: 1.82;
 }
 
-.article-body > h1:first-of-type {
+.article-body h1:first-of-type {
   display: none;
+}
+
+.article-fragment {
+  display: contents;
 }
 
 .article-body h2 {
@@ -407,6 +411,130 @@ a:focus-visible,
 
 .article-body blockquote p:last-child {
   margin-bottom: 0;
+}
+
+.nudge-card {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 118px;
+  align-items: center;
+  gap: 20px;
+  overflow: hidden;
+  margin: 4px 0 28px;
+  padding: 18px 20px;
+  border: 1px solid var(--line-strong);
+  background: var(--active-surface);
+}
+
+.nudge-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 3px;
+  background: var(--accent);
+}
+
+.nudge-copy {
+  min-width: 0;
+}
+
+.nudge-kicker {
+  display: block;
+  margin-bottom: 2px;
+  color: var(--muted);
+  font-family: var(--mono);
+  font-size: var(--text-small);
+}
+
+.nudge-copy p {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin: 0;
+  line-height: 1.35;
+}
+
+.nudge-copy strong {
+  color: var(--ink);
+  font-family: var(--mono);
+  font-size: 24px;
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+}
+
+.nudge-copy p span {
+  color: var(--ink-soft);
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.nudge-copy small {
+  display: block;
+  margin-top: 3px;
+  color: var(--muted);
+  font-size: var(--text-small);
+  line-height: 1.5;
+}
+
+.nudge-button {
+  position: relative;
+  width: 118px;
+  min-width: 118px;
+  max-width: 118px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 0 16px;
+  border: 1px solid var(--ink);
+  background: var(--ink);
+  color: var(--paper);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: transform 180ms cubic-bezier(.16, 1, .3, 1), box-shadow 180ms ease, background-color 180ms ease;
+}
+
+.nudge-button:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 3px 3px 0 var(--accent);
+}
+
+.nudge-button:active {
+  transform: translate(1px, 1px);
+  box-shadow: none;
+}
+
+.nudge-button svg {
+  flex: 0 0 auto;
+  transform-origin: 50% 10%;
+}
+
+.nudge-plus {
+  position: absolute;
+  top: -12px;
+  right: 8px;
+  opacity: 0;
+  color: var(--accent);
+  font-family: var(--mono);
+  font-size: var(--text-small);
+  font-weight: 700;
+  pointer-events: none;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  padding: 0;
+  margin: -1px;
+  border: 0;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
 }
 
 .syntax-block {
@@ -1904,6 +2032,17 @@ a:focus-visible,
     padding: 18px;
     border-right: 0;
     border-left: 0;
+  }
+
+  .nudge-card {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .nudge-button {
+    width: 100%;
+    min-width: 0;
+    max-width: none;
   }
 
   .lesson-footer {

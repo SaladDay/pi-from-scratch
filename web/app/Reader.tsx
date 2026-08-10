@@ -18,6 +18,7 @@ import PanelRightOpen from "lucide-react/dist/esm/icons/panel-right-open.mjs";
 import Sun from "lucide-react/dist/esm/icons/sun.mjs";
 import X from "lucide-react/dist/esm/icons/x.mjs";
 import { fullRepo, lessons, type Lesson } from "./lesson-data";
+import NudgeCounter from "./NudgeCounter";
 import TraceLab from "./TraceLab";
 
 hljs.registerLanguage("typescript", typescript);
@@ -92,8 +93,14 @@ function renderMarkdown(markdown: string): string {
   return marked.parse(withAnchors, { gfm: true, renderer }) as string;
 }
 
-const ArticleBody = memo(function ArticleBody({ html }: { html: string }) {
-  return <div className="article-body" dangerouslySetInnerHTML={{ __html: html }} />;
+const ArticleBody = memo(function ArticleBody({ before, after }: { before: string; after: string | null }) {
+  return (
+    <div className="article-body">
+      <div className="article-fragment" dangerouslySetInnerHTML={{ __html: before }} />
+      {after !== null && <NudgeCounter />}
+      {after !== null && <div className="article-fragment" dangerouslySetInnerHTML={{ __html: after }} />}
+    </div>
+  );
 });
 
 function addedLines(previous: string, current: string): Set<number> {
@@ -545,7 +552,15 @@ function Reader({ lesson, navigate }: { lesson: Lesson; navigate: (screen: Scree
   const [openFiles, setOpenFiles] = useState<string[]>([]);
   const [navigationLocked, setNavigationLocked] = useState(false);
   const [mobilePanelOpen, setMobilePanelOpen] = useState(false);
-  const html = useMemo(() => renderMarkdown(lesson.markdown), [lesson.markdown]);
+  const articleHtml = useMemo(() => {
+    const marker = "<!-- nudge-counter -->";
+    const markerIndex = lesson.markdown.indexOf(marker);
+    if (markerIndex < 0) return { before: renderMarkdown(lesson.markdown), after: null };
+    return {
+      before: renderMarkdown(lesson.markdown.slice(0, markerIndex)),
+      after: renderMarkdown(lesson.markdown.slice(markerIndex + marker.length)),
+    };
+  }, [lesson.markdown]);
 
   useEffect(() => {
     let frame = 0;
@@ -636,7 +651,7 @@ function Reader({ lesson, navigate }: { lesson: Lesson; navigate: (screen: Scree
           <header className="lesson-header">
             <h1>{lesson.title}</h1>
           </header>
-          <ArticleBody html={html} />
+          <ArticleBody before={articleHtml.before} after={articleHtml.after} />
           <footer className="lesson-footer">
             <button onClick={() => navigate(nextScreen)}>{nextLabel}</button>
           </footer>

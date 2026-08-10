@@ -8,7 +8,9 @@
 
 放轻松，这是一篇文章，不是一本书，而且是给初学者写的，你会很容易看懂。同时，我们有一个“语法扫盲块“，不用担心TS的语法看不懂。
 
-> BTW，现在是一篇文章，后续可能会变成很多篇。pi 里还有不少 nano-pi 没覆盖的东西值得单独写，比如精确的 token 估算和 compaction 切割策略、TypeScript 扩展系统（extensions / skills）、多 provider 适配和 model routing、session branching、以及 pi-tui 的 differential renderer【这些词是什么意思都不用管，只是预告一下】。方便的话，或许能给[github仓库](https://github.com/SaladDay/pi-from-scratch)点点star，这给我提供了继续更新下去的动力🤗。
+> BTW，现在是一篇文章，后续可能会变成很多篇。pi 里还有不少 nano-pi 没覆盖的东西值得单独写，比如精确的 token 估算和 compaction 切割策略、TypeScript 扩展系统（extensions / skills）、多 provider 适配和 model routing、session branching、以及 pi-tui 的 differential renderer【这些词是什么意思都不用管，只是预告一下】。方便的话，或许能给 [github仓库](https://github.com/SaladDay/pi-from-scratch) 点点star，这给我提供了继续更新下去的动力🤗。
+
+<!-- nudge-counter -->
 
 ## 让我们开始吧。
 

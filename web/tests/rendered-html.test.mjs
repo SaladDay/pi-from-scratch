@@ -12,13 +12,16 @@ test("server-renders the preface as the entry", async () => {
   assert.match(html, /<title>PI from Scratch · 创造属于你的pi-agent<\/title>/i);
   assert.match(html, /先导/);
   assert.match(html, /nano-pi/);
+  assert.match(html, /催一下/);
+  assert.match(html, /次催更留在了这里/);
   assert.doesNotMatch(html, /codex-preview|Your site is taking shape|react-loading-skeleton/i);
 });
 
 test("keeps lesson content generated from the teaching sources", async () => {
-  const [generated, reader, lessonData, traceLab, traceDebugger, traceData, layout, styles, page, packageJson] = await Promise.all([
+  const [generated, reader, nudgeCounter, lessonData, traceLab, traceDebugger, traceData, layout, styles, page, packageJson] = await Promise.all([
     readFile(new URL("../app/content.generated.ts", import.meta.url), "utf8"),
     readFile(new URL("../app/Reader.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/NudgeCounter.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/lesson-data.ts", import.meta.url), "utf8"),
     readFile(new URL("../app/TraceLab.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/trace-debugger.ts", import.meta.url), "utf8"),
@@ -44,6 +47,14 @@ test("keeps lesson content generated from the teaching sources", async () => {
   assert.match(reader, /selectionCauseRef/);
   assert.match(reader, /editor-lock/);
   assert.match(reader, /navigationLocked/);
+  assert.match(generated, /nudge-counter/);
+  assert.match(reader, /<NudgeCounter \/>/);
+  assert.match(nudgeCounter, /countapi\.mileshilliard\.com\/api\/v1/);
+  assert.match(nudgeCounter, /operation = increment \? "hit" : "get"/);
+  assert.match(nudgeCounter, /bellRef\.current\?\.animate/);
+  assert.doesNotMatch(nudgeCounter, /key=\{burst\}/);
+  assert.match(styles, /\.nudge-button/);
+  assert.match(styles, /grid-template-columns: minmax\(0, 1fr\) 118px/);
   assert.match(lessonData, /"src\/llm\.ts": "", "src\/agent\.ts": ""/);
   assert.match(lessonData, /initialRepo: emptyRepo/);
   assert.match(lessonData, /chapter2Repo/);

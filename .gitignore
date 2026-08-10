@@ -7,3 +7,6 @@ dist/
 *.log
 tmp.md
 .vercel
+docs/pi-from-scratch.md
+docs/plans/
+docs/specs/
