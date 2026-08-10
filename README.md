@@ -48,6 +48,10 @@ npm test
 cd web && npm test
 ```
 
+## Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=SaladDay/pi-from-scratch&type=Date)](https://www.star-history.com/#SaladDay/pi-from-scratch&Date)
+
 ## Thanks
 
 - [LINUX DO](https://linux.do/) 社区
