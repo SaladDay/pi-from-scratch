@@ -50,7 +50,11 @@ cd web && npm test
 
 ## Star History
 
-[![Star History Chart](https://api.star-history.com/svg?repos=SaladDay/pi-from-scratch&type=Date)](https://www.star-history.com/#SaladDay/pi-from-scratch&Date)
+<p align="center">
+  <a href="https://www.star-history.com/#SaladDay/pi-from-scratch&amp;Date">
+    <img src="https://api.star-history.com/chart?repos=SaladDay%2Fpi-from-scratch&amp;type=date&amp;legend=top-left&amp;sealed_token=zEX_hDx767RuvD8h02AAC8PQvRcc5HyRIrKXaM5IoysJtPVPUhY8x-JjF6a1XFnUN1acFyB111JWBmLFh6yzfhmk6sbPo3EXlz2VPf6UXxM7iUtALO3wYvU3zj9u3Xmj8CleWffL6e7wzGJ7k7K2kOHcAzc8gOTwZqmrxObgmuKUJC2aEV1vygRPnnwP" width="560" alt="Star History Chart">
+  </a>
+</p>
 
 ## Thanks
 
