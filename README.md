@@ -47,6 +47,13 @@ npm install
 npm run dev
 ```
 
+## Thanks
+
+感谢 [OpenModel](https://www.openmodel.ai?ref=JGDNqZl8) 为本项目提供 API 测试支持。OpenModel 提供稳定可靠的 AI API 和生产级 SLA 保障，一个接口即可调用 50+ 主流模型，并可直接用于 Claude Code、Codex，以及你刚刚亲手做好的 nano-pi 🤖。
+
+- [LINUX DO](https://linux.do/) 社区
+- [pi-book](https://github.com/antinomie-lab/pi-book)
+
 ## Star History
 
 <p align="center">
@@ -54,11 +61,6 @@ npm run dev
     <img src="https://api.star-history.com/chart?repos=SaladDay%2Fpi-from-scratch&amp;type=date&amp;legend=top-left&amp;sealed_token=zEX_hDx767RuvD8h02AAC8PQvRcc5HyRIrKXaM5IoysJtPVPUhY8x-JjF6a1XFnUN1acFyB111JWBmLFh6yzfhmk6sbPo3EXlz2VPf6UXxM7iUtALO3wYvU3zj9u3Xmj8CleWffL6e7wzGJ7k7K2kOHcAzc8gOTwZqmrxObgmuKUJC2aEV1vygRPnnwP" width="560" alt="Star History Chart">
   </a>
 </p>
-
-## Thanks
-
-- [LINUX DO](https://linux.do/) 社区
-- [pi-book](https://github.com/antinomie-lab/pi-book)
 
 ## License
 

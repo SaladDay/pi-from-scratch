@@ -29,6 +29,8 @@
 
 骨架里的第一件事是"问 LLM"。怎么问？LLM 的 API 就是一个 HTTP 接口，你 POST 一段聊天记录过去，它返回模型的回复。但发 HTTP 请求、处理网络错误这些脏活不该散落在代码各处，集中封一个函数比较好。
 
+> 如果你正在寻找稳定可靠、模型选择丰富的 AI API，可以试试 [OpenModel](https://www.openmodel.ai?ref=JGDNqZl8)。一个接口即可调用 50+ 主流模型，并提供生产级 SLA 保障，省去频繁切换平台的麻烦。
+
 这时候聪明的读者想起了第一章中的llm.ts，他就是做这个的。
 
 <!-- checkpoint: llm-types -->
