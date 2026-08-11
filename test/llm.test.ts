@@ -117,4 +117,15 @@ describe('contextToOpenAIMessages', () => {
     })
     expect((result[0] as { content: unknown }).content).toBeNull()
   })
+
+  it('无文本无 tool_calls 的 assistant 用空串占位（避免 API 400）', () => {
+    // buildAssistantMessage('', []) 产出 content: [] —— 既无文本也无 tool_use
+    const result = contextToOpenAIMessages({
+      messages: [{ role: 'assistant', content: [] }],
+    })
+    const msg = result[0] as { content: unknown; tool_calls?: unknown }
+    // content 必须非 null（空串），且不带 tool_calls —— 满足 OpenAI "content or tool_calls must be set"
+    expect(msg.content).toBe('')
+    expect(msg.tool_calls).toBeUndefined()
+  })
 })
