@@ -74,8 +74,10 @@ export function contextToOpenAIMessages(context: Context): object[] {
           toolCalls.push({ id: b.id, type: 'function', function: { name: b.name, arguments: JSON.stringify(b.input) } })
         }
       }
-      // OpenAI 要求纯 tool_call 的 assistant 消息 content 必须为 null
-      messages.push({ role: 'assistant', content: text || null, tool_calls: toolCalls.length ? toolCalls : undefined })
+      // OpenAI 要求 assistant 消息必须有 content（非 null）或 tool_calls。
+      // 纯 tool_call 时 content 为 null；两者皆空（如 abort/error 后的无内容轮次）用空串占位，避免 API 400。
+      const content = text || (toolCalls.length ? null : '')
+      messages.push({ role: 'assistant', content, tool_calls: toolCalls.length ? toolCalls : undefined })
     } else {
       // user message 里的 tool_result block → OpenAI 要求独立的 role:tool 消息
       for (const b of blocks) {
