@@ -7,6 +7,20 @@ npm install
 npm run dev
 ```
 
+如果通过 `npm run dev` 输出的局域网 `Network` 地址访问开发站点，需要允许对应的 hostname，否则 Next.js 可能会阻止开发资源（包括 HMR），导致页面交互失效。例如：
+
+```bash
+NEXT_ALLOWED_DEV_ORIGINS=192.168.31.245 npm run dev
+```
+
+多个 hostname 可以用逗号分隔：
+
+```bash
+NEXT_ALLOWED_DEV_ORIGINS=192.168.31.245,my-dev-host.local npm run dev
+```
+
+修改配置后需要重启开发服务器。
+
 生产构建：
 
 ```bash
