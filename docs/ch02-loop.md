@@ -474,13 +474,13 @@ messages[35]  user: "再加个 README"
 messages[54]  assistant: "README 写好了。"
 ```
 
-压缩后变成 36 条。前 35 条被一条摘要替换，最近 20 条原样保留：
+压缩后变成 21 条。前 35 条被一条摘要替换，最近 20 条原样保留：
 
 ```
 messages[0]   user: "[context summary]\n用户要求建一个项目，已完成目录结构、package.json、核心模块和测试..."
 messages[1]   user: "再加个 README"     ← 第 36 条，最近 20 条的起点
 ...
-messages[35]  assistant: "README 写好了。"
+messages[20]  assistant: "README 写好了。"
 ```
 
 模型下一轮看到的是摘要加上最近的对话，足以理解当前工作状态，而 context 的体积缩了一大截。
