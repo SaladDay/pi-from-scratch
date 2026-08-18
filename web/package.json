@@ -12,7 +12,7 @@
     "prebuild": "npm run generate:content",
     "build": "next build --webpack",
     "start": "next start",
-    "test": "NEXT_DIST_DIR=.next-test npm run build && node --test tests/rendered-html.test.mjs",
+    "test": "NEXT_DIST_DIR=.next-test npm run build && node --test \"tests/*.test.mjs\"",
     "lint": "eslint . --ignore-pattern dist --ignore-pattern .next --ignore-pattern .next-test"
   },
   "dependencies": {
