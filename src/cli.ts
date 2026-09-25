@@ -96,9 +96,15 @@ export async function loadSession(file: string = SESSION_FILE): Promise<Message[
 /** 持久化 messages 到 session 文件（导出供测试） */
 export async function persistSession(messages: Message[], file: string = SESSION_FILE): Promise<void> {
   await fs.mkdir(path.dirname(file) || '.', { recursive: true })
-  const newMessages = messages.slice(persistedCount)
-  for (const msg of newMessages) {
-    await fs.appendFile(file, JSON.stringify(msg) + '\n', 'utf-8')
+  if (messages.length < persistedCount) {
+    // Compaction replaces the in-memory history, so stale lines must be removed
+    // before append-only persistence can resume from the shorter list.
+    await fs.writeFile(file, messages.map(msg => JSON.stringify(msg)).join('\n') + (messages.length ? '\n' : ''), 'utf-8')
+  } else {
+    const newMessages = messages.slice(persistedCount)
+    for (const msg of newMessages) {
+      await fs.appendFile(file, JSON.stringify(msg) + '\n', 'utf-8')
+    }
   }
   persistedCount = messages.length
 }

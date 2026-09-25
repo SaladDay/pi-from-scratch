@@ -21,4 +21,30 @@ describe('session persistence', () => {
     await persistSession(messages, tmpFile)
     expect(await loadSession(tmpFile)).toEqual(messages)
   })
+
+  it('rewrites the file after context compaction before appending new messages', async () => {
+    await fs.writeFile(tmpFile, '')
+    await loadSession(tmpFile)
+
+    const initial: Message[] = [
+      { role: 'user', content: 'old-1' },
+      { role: 'assistant', content: 'old-2' },
+      { role: 'user', content: 'old-3' },
+    ]
+    const compacted: Message[] = [
+      { role: 'user', content: '[context summary]' },
+      { role: 'assistant', content: 'recent' },
+    ]
+    const afterCompaction: Message[] = [
+      ...compacted,
+      { role: 'user', content: 'new prompt' },
+    ]
+
+    await persistSession(initial, tmpFile)
+    await loadSession(tmpFile)
+    await persistSession(compacted, tmpFile)
+    await persistSession(afterCompaction, tmpFile)
+
+    expect(await loadSession(tmpFile)).toEqual(afterCompaction)
+  })
 })
