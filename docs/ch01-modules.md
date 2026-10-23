@@ -57,7 +57,7 @@ pi 里对应 `pi-agent-core`。
 
 `runAgent()` 往外吐 AgentEvent。在nanopi 里由 CLI 接收这些事件，再给 Tui 、让他渲染出来；换成 Web 应用时，可以让 HTTP server 接收同一条事件流，再通过 SSE 发给浏览器、让浏览器渲染结果。nanopi 自带的是左边那个 tui，但你随时可以换成别的。
 
-![同一个 AgentEvent 流可以被不同界面消费](/figures/event-consumers.png)
+![同一个 AgentEvent 流可以被不同界面消费](../web/public/figures/event-consumers.png)
 
 
 ## cli.ts
@@ -73,11 +73,11 @@ pi 里对应 `pi-coding-agent`【碎碎念，在我们这可能比较简单，�
 
 用户输入从 tui 出发，cli 把它塞进 Context 交给 agent。agent 调 llm 的 `stream()` 问模型，模型回复（可能带着 tool_call）通过 agent 转发给 tui 显示。有 tool_call 就找 tools 执行，把结果放回到 Context，再问。没 tool_call 就等用户下一轮输入。每轮结束 cli 把新增的消息持久化到 `~/.nanopi/session.jsonl`。
 
-![nanopi 一轮完整的数据流](/figures/full-roundtrip.png)
+![nanopi 一轮完整的数据流](../web/public/figures/full-roundtrip.png)
 
 换个角度，看依赖关系。llm 不知道 agent 的存在，agent 不知道 tui 长什么样，tools 不知道自己被谁调用，tui 只认识 AgentEvent。cli 是唯一知道所有人的那个，它的工作就是把它们粘在一起。这种单向依赖让每个模块都可以独立替换，换掉 tui、换掉 tools、甚至换掉 llm 的 provider，上下游都不用改。
 
-![nanopi 五模块依赖关系](/figures/module-architecture.png)
+![nanopi 五模块依赖关系](../web/public/figures/module-architecture.png)
 
 
 **好了，现在已经知道有哪些模块了，我已经迫不及待想开始写代码了！**

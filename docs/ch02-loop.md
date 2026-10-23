@@ -348,7 +348,7 @@ context 就是这么一条一条长起来的。每轮 stream 加一条 assistant
 
 把这段过程画成数据流，就是下面这张图。实线是会更新 Context 的主循环：Context 先进入 `stream()`，agent 收到 StreamEvent 后，把 assistant message 和可能出现的 tool_result 写回 Context。虚线是 agent 发给 UI 的 AgentEvent，它只负责把过程展示出来，不会改变下一轮输入。
 
-![一轮 Agent Loop 的内部数据流](/figures/agent-data-flow.png)
+![一轮 Agent Loop 的内部数据流](../web/public/figures/agent-data-flow.png)
 
 数据闭环在 Context、stream、agent 和 tool。UI 挂在循环外面，换成终端、网页或者日志记录器，都不会改动 agent loop。
 
