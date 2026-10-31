@@ -19,18 +19,22 @@
     "typescript-tutorial"
   ],
   "type": "module",
-  "bin": { "pi-from-scratch": "./dist/cli.js" },
+  "bin": {
+    "pi-from-scratch": "./dist/cli.js"
+  },
   "scripts": {
     "build": "tsc",
     "dev": "tsx src/cli.ts",
     "generate:traces": "tsx scripts/generate-traces.ts",
     "test": "vitest run"
   },
-  "dependencies": {},
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.32.2"
+  },
   "devDependencies": {
-    "typescript": "^5.6.0",
-    "vitest": "^2.1.0",
+    "@types/node": "^22.0.0",
     "tsx": "^4.19.0",
-    "@types/node": "^22.0.0"
+    "typescript": "^5.6.0",
+    "vitest": "^2.1.0"
   }
 }

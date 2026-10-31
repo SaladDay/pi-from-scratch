@@ -12,6 +12,7 @@ const sourcePaths = [
   "src/tools.ts",
   "src/tui.ts",
   "src/cli.ts",
+  "src/search.ts",
 ];
 
 const generatedPath = resolve(webRoot, "app/content.generated.ts");

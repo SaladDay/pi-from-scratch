@@ -36,6 +36,17 @@ npm run dev
 
 - `NANOPI_MODEL`：模型名
 - `NANOPI_BASE_URL`：OpenAI 兼容接口地址，默认 `https://api.openai.com/v1`
+- `NANOPI_SEARCH`：默认 `parallel`；设置为 `off` 禁用联网工具，仅保留四个本地工具。
+
+CLI 默认提供 `web_search` 和 `web_fetch`，可搜索最新库文档并读取来源页面。它们通过
+[Parallel Search MCP](https://docs.parallel.ai/integrations/mcp/search-mcp) 调用免费匿名搜索和页面提取，
+搜索使用 Fast 模式，无需 Parallel 账号或 API Key。只有模型调用联网工具时才会连接远端；查询和 URL
+会发送给 Parallel，免费服务有使用额度限制，失败会作为工具错误返回，不会切换到其他服务。
+每次工具调用最多等待 30 秒，Esc 可取消。网页内容是外部资料，不应作为指令执行。
+
+联网扩展在 `src/search.ts`，核心教学工具 `builtinTools()` 和自定义 `runAgent` 工具列表保持原样。
+CLI 在 `~/.nanopi/search-session-id` 保存不含个人信息的会话 UUID；恢复历史时复用，清空
+`~/.nanopi/session.jsonl` 后会开始新的会话。模型的 `NANOPI_API_KEY` 仍按原方式配置。
 
 线上 trace 是预先生成的静态数据，浏览网站不会发起模型请求。
 
