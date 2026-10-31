@@ -7,7 +7,7 @@ import * as path from 'node:path'
 import * as os from 'node:os'
 import { runAgent } from './agent.js'
 import { Tui } from './tui.js'
-import { builtinTools } from './tools.js'
+import { runtimeTools } from './search.js'
 import type { Model, Context, Message } from './llm.js'
 
 const SESSION_DIR = path.join(os.homedir(), '.nanopi')
@@ -40,7 +40,7 @@ async function main() {
     messages: await loadSession(),
   }
 
-  const tools = builtinTools()
+  const tools = await runtimeTools(context, { sessionFile: path.join(SESSION_DIR, 'search-session-id') })
   const tui = new Tui()
 
   // 每轮：用户输入 → runAgent → 事件转发到 TUI → 持久化
